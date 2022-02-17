@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React,{useEffect,useState} from "react"
+import React,{useEffect,useState,useRef} from "react"
 import { initializeApp } from "firebase/app";
 import { doc, addDoc , onSnapshot, orderBy , collection,serverTimestamp, query, getFirestore, setDoc  } from "firebase/firestore";
 import { getAuth ,signInWithPopup, GoogleAuthProvider} from "firebase/auth";
@@ -78,13 +78,24 @@ function Chatroom(){
     })
     setFormValue('')
   }
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages]);
+  
   return (
     <>
     <main>
     <div>
-      { messages && messages.map(msg=><ChatMessage key={msg.id} message={msg} auth={auth} />)}
+      { messages && messages.map(msg=><ChatMessage key={msg.id} {...msg } auth={auth} />)}
     </div>
-    <div></div>
+    <div ref={messagesEndRef}></div>
+    
     </main>
     <form onSubmit={sendMessage}>
       <input value={formValue} onChange={(e)=>setFormValue(e.target.value )}/>

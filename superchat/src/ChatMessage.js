@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ChatMessage( { message:{text , uid ,photoURL} , auth}) {
+function ChatMessage( { text , uid ,photoURL, auth}) {
    const messageClass = uid === auth.currentUser.uid ?'sent' : 'recieved' ;  
   return (
       <div className={`message ${messageClass}`}>
